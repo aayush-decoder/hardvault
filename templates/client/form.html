@@ -7,20 +7,56 @@
 </head>
 <body>
     <form action="{% url "download-file" %}" method="GET">
-        Name<input type="text" name="name" required>
+        Name<input type="text" onchange="updateName(this)" name="name" required>
         <br>
-        email<input type="email" name="email">
+        email<input type="email" onchange="updateEmail(this)" oninput="removeErrorLabel()" name="email">
+        {% if duplicate_email %}
+            <span id="emailError" style="color: red">This email is already registered. Please try different email.</span>
+        {% else %}
+            <span id="emailError" style="color: red"></span>
+        {% endif %}
         <br>
         phone<input type="text" name="phone">
         <br>
-        <hr>
-        product num<input type="text" name="product-num">
-        <br>
-        ram drive number<input type="text" name="ram-num">
-        <br>
-        HDD number<input type="text" name="harddisc-num">
-        <br>
-        <button type="submit">Submit</button>
+        <button type="submit" onclick="showLoading()">
+            Submit
+        </button>
     </form>
+
+    Steps:
+    <br>
+    <ol>
+        <li>Run the .exe file</li>
+        <li><a id="link" href="#">Click here</a> to see your hardware details</li>
+    </ol>
+
+<script>
+
+    var name, email;
+
+    function showLoading() {
+        this.innerHTML = "Checking compatibility. Your will start downloading less than 30 seconds";
+
+    }
+
+    function removeErrorLabel() {
+        document.getElementById("emailError").innerHTML = "";
+    }
+
+    function updateName(p) {
+        name = p.value;
+        document.getElementById("link").href = `{% url "client-data-api" %}&name=${name}&email=${email}`;
+    }
+
+    function updateEmail(p) {
+        email = p.value;
+        document.getElementById("link").href = `{% url "client-data-api" %}?name=${name}&email=${email}`;
+    }
+
+
+
+
+</script>
+
 </body>
 </html>

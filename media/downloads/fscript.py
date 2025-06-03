@@ -24,10 +24,10 @@ def get_flat_hardware_data():
         }
 
         data = {
-            "client_name": "Aayush Name",
-            "client_email": "client@example.com",
-            "client_phone": "1234567890",
-            "owner_name": "Owner Name",
+            "client_name": "Sanskar Bharti Vidhyalaya",
+            "client_email": "somyasai12@gmail.com",
+            "client_phone": "09624256849",
+            "owner_name": "Shop Owner's name",
             "device_product_id": system.IdentifyingNumber.strip(),
             "device_model_name": system.Name.strip(),
             **ram_info,

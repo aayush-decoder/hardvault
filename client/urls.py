@@ -8,4 +8,5 @@ urlpatterns = [
     path('login/', views.login, name="client-login"),
     path('form/', views.form, name="product-form"),
     path('form/download', views.download_file, name="download-file"),
+    path('data/api', views.fetch_data, name="client-data-api")
 ]

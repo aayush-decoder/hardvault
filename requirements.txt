@@ -1,5 +1,7 @@
 django
 wmi
+pyinstaller
+requests
 psutil
 platform
 json
