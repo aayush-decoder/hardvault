@@ -1,0 +1,5 @@
+django
+wmi
+psutil
+platform
+json

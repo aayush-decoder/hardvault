@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <form action="{% url "download-file" %}" method="GET">
+        Name<input type="text" name="name" required>
+        <br>
+        email<input type="email" name="email">
+        <br>
+        phone<input type="text" name="phone">
+        <br>
+        <hr>
+        product num<input type="text" name="product-num">
+        <br>
+        ram drive number<input type="text" name="ram-num">
+        <br>
+        HDD number<input type="text" name="harddisc-num">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
