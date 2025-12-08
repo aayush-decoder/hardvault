@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Hardware Collector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .code-box {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2e7d32;
+            letter-spacing: 3px;
+            font-family: monospace;
+        }
+        .instructions {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #e65100;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #2196f3;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #1976d2;
+        }
+        .warning {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning strong {
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✓ Registration Successful!</h1>
+        
+        <div class="code-box">
+            <p style="margin: 0; font-size: 16px; color: #666;">Your Client Code:</p>
+            <div class="code">{{ client_code }}</div>
+            <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">Save this code - you'll need it!</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠ IMPORTANT:</strong> Please save your client code somewhere safe. You will need to enter this code when running the hardware collector program.
+        </div>
+
+        <a href="{{ download_url }}" class="download-btn">⬇ Download Hardware Collector</a>
+
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li><strong>Download the program</strong> by clicking the button above</li>
+                <li><strong>Run the downloaded file</strong> (hardware_collector.exe)</li>
+                <li><strong>Enter your client code</strong> when prompted: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">{{ client_code }}</code></li>
+                <li>The program will automatically collect your hardware information and submit it</li>
+                <li>Wait for the success message</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 5px; text-align: center;">
+            <p style="margin: 0; color: #666;">Need help? Contact your shop owner or support team.</p>
+        </div>
+    </div>
+</body>
+</html>

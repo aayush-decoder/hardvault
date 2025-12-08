@@ -5,3 +5,4 @@ requests
 psutil
 platform
 json
+psycopg2

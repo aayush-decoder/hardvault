@@ -9,9 +9,12 @@ class HardwareRecord(models.Model):
     # Owner Info (shop owner)
     owner_name = models.CharField(max_length=100)
 
+    # Unique Code for client (first 3 chars of email + 6 random chars)
+    client_code = models.CharField(max_length=20, unique=True, null=True)
+
     # System Info
-    product_id = models.CharField(max_length=100)
-    model_name = models.CharField(max_length=255)
+    product_id = models.CharField(max_length=100, blank=True, null=True)
+    model_name = models.CharField(max_length=255, blank=True, null=True)
 
     # RAM Info
     ram_serial = models.CharField(max_length=100, blank=True, null=True)
@@ -24,4 +27,4 @@ class HardwareRecord(models.Model):
     disk_serial = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.client_name} - {self.model_name}"
+        return f"{self.client_name} - {self.client_code}"

@@ -6,6 +6,8 @@ import os
 from django.conf import settings
 import subprocess
 import shutil
+import random
+import string
 
 from owner.models import HardwareRecord
 
@@ -56,26 +58,39 @@ def fetch_data(request):
 
 
 
+def generate_client_code(email):
+    """Generate a unique code: first 3 chars of email + 6 random alphanumeric chars"""
+    prefix = email[:3].upper()
+    random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return prefix + random_part
+
+
 def download_file(request):
     if request.method == 'GET':
         name = request.GET.get('name')
         email = request.GET.get('email')
         phone = request.GET.get('phone')
+        owner_name = request.GET.get('owner_name', 'Shop Owner')  # Default owner name
 
         exists = HardwareRecord.objects.filter(client_email=email).exists()
 
         if exists:
             return render(request, "client/form.html", {'request': request, 'duplicate_email': True})
 
-        users_data = {
-            "name": name,
-            "email": email,
-            "phone": phone
-        }
+        # Generate unique code
+        client_code = generate_client_code(email)
 
-        
-        return prepare_exe_file(users_data)
+        # Create record in database with empty hardware fields
+        HardwareRecord.objects.create(
+            client_name=name,
+            client_email=email,
+            client_phone=phone,
+            owner_name=owner_name,
+            client_code=client_code
+        )
 
+        # Prepare the general exe file and show code to user
+        return prepare_exe_file(request, client_code)
 
     return HttpResponse("LOL")
 
@@ -83,64 +98,50 @@ def download_file(request):
 
 
 
-def personalise_script(users_data):
-    static_path = os.path.join(settings.BASE_DIR, 'static', 'script4.py')
-    output_path = os.path.join(settings.MEDIA_ROOT, 'downloads', 'fscript.py')
-
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-    try:
-        with open(static_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        updated_content = content.replace("$NAME", users_data["name"])
-        updated_content = updated_content.replace("$EMAIL", users_data["email"])
-        updated_content = updated_content.replace("$PHONE", users_data["phone"])
-        updated_content = updated_content.replace("$OWNER_NAME", "Shop Owner's name")
-        print("userss data ", users_data)
-
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(updated_content)
-
-        return output_path
-
-    except Exception as e:
-        return f"Error: {str(e)}"
+def prepare_exe_file(request, client_code):
+    """Serve the pre-built general exe file and display the code to user"""
+    # Path to the general exe file (should be pre-built and stored)
+    file_path = os.path.join(settings.MEDIA_ROOT, 'downloads', 'hardware_collector.exe')
+    
+    # Check if general exe exists, if not, we need to build it once
+    if not os.path.exists(file_path):
+        # Build the general exe once (without personalization)
+        file_path = build_general_exe()
+    
+    # Render a page showing the code and download link
+    return render(request, 'client/download.html', {
+        'client_code': client_code,
+        'download_url': '/client/form/download-exe'
+    })
 
 
-
-
-
-
-def build_exe(users_data):
-    script_path = personalise_script(users_data)
-    output_dir = os.path.join(settings.MEDIA_ROOT, 'downloads', 'dist')
+def build_general_exe():
+    """Build the general exe file once (without user-specific data)"""
+    static_path = os.path.join(settings.BASE_DIR, 'static', 'script_general.py')
+    output_dir = os.path.join(settings.MEDIA_ROOT, 'downloads')
     os.makedirs(output_dir, exist_ok=True)
 
     # Run PyInstaller to build the executable
     subprocess.run([
         'pyinstaller',
-        '--name', 'script',
+        '--name', 'hardware_collector',
         '--onefile',
         '--distpath', output_dir,
         '--workpath', os.path.join(output_dir, 'build'),
         '--specpath', os.path.join(output_dir, 'spec'),
-        script_path
+        static_path
     ], check=True)
 
     # Clean up the extra build files
     shutil.rmtree(os.path.join(output_dir, 'build'), ignore_errors=True)
     shutil.rmtree(os.path.join(output_dir, 'spec'), ignore_errors=True)
-    build_name = 'script.exe'
 
-    return os.path.join(output_dir, build_name)
-
+    return os.path.join(output_dir, 'hardware_collector.exe')
 
 
-
-
-def prepare_exe_file(users_data):
-    # file_path = os.path.join(settings.MEDIA_ROOT, 'downloads', 'script.exe')
-    file_path = build_exe(users_data)
-    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename='script.exe')
+def download_exe(request):
+    """Endpoint to actually download the exe file"""
+    file_path = os.path.join(settings.MEDIA_ROOT, 'downloads', 'hardware_collector.exe')
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'), as_attachment=True, filename='hardware_collector.exe')
+    return HttpResponse("Exe file not found", status=404)

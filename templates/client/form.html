@@ -9,14 +9,16 @@
     <form action="{% url "download-file" %}" method="GET">
         Name<input type="text" onchange="updateName(this)" name="name" required>
         <br>
-        email<input type="email" onchange="updateEmail(this)" oninput="removeErrorLabel()" name="email">
+        email<input type="email" onchange="updateEmail(this)" oninput="removeErrorLabel()" name="email" required>
         {% if duplicate_email %}
             <span id="emailError" style="color: red">This email is already registered. Please try different email.</span>
         {% else %}
             <span id="emailError" style="color: red"></span>
         {% endif %}
         <br>
-        phone<input type="text" name="phone">
+        phone<input type="text" name="phone" required>
+        <br>
+        Owner Name<input type="text" name="owner_name" placeholder="Shop Owner Name">
         <br>
         <button type="submit" onclick="showLoading()">
             Submit

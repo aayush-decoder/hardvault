@@ -24,9 +24,9 @@ def get_flat_hardware_data():
         }
 
         data = {
-            "client_name": "Sanskar Bharti Vidhyalaya",
-            "client_email": "somyasai12@gmail.com",
-            "client_phone": "09624256849",
+            "client_name": "Aayush Prasad Shambhu",
+            "client_email": "aayushp336@gmail.com",
+            "client_phone": "09328788481",
             "owner_name": "Shop Owner's name",
             "device_product_id": system.IdentifyingNumber.strip(),
             "device_model_name": system.Name.strip(),
