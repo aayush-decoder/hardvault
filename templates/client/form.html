@@ -6,7 +6,8 @@
     <title>Form</title>
 </head>
 <body>
-    <form action="{% url "download-file" %}" method="GET">
+    <form action="{% url "submit-form" %}" method="POST">
+        {% csrf_token %}
         Name<input type="text" onchange="updateName(this)" name="name" required>
         <br>
         email<input type="email" onchange="updateEmail(this)" oninput="removeErrorLabel()" name="email" required>

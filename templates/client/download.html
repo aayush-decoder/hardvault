@@ -22,21 +22,6 @@
             color: #333;
             text-align: center;
         }
-        .code-box {
-            background: #e8f5e9;
-            border: 2px solid #4caf50;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .code {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2e7d32;
-            letter-spacing: 3px;
-            font-family: monospace;
-        }
         .instructions {
             background: #fff3e0;
             border-left: 4px solid #ff9800;
@@ -80,26 +65,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>✓ Registration Successful!</h1>
-        
-        <div class="code-box">
-            <p style="margin: 0; font-size: 16px; color: #666;">Your Client Code:</p>
-            <div class="code">{{ client_code }}</div>
-            <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">Save this code - you'll need it!</p>
-        </div>
+        <h1>Download Hardware Collector</h1>
 
         <div class="warning">
-            <strong>⚠ IMPORTANT:</strong> Please save your client code somewhere safe. You will need to enter this code when running the hardware collector program.
+            <strong>⚠ IMPORTANT:</strong> Make sure you have saved your client code from the previous page. You will need to enter it when running the program.
         </div>
 
-        <a href="{{ download_url }}" class="download-btn">⬇ Download Hardware Collector</a>
+        <a href="{% url 'download-exe-file' %}" class="download-btn">⬇ Download Hardware Collector</a>
 
         <div class="instructions">
             <h3>📋 Instructions:</h3>
             <ol>
                 <li><strong>Download the program</strong> by clicking the button above</li>
                 <li><strong>Run the downloaded file</strong> (hardware_collector.exe)</li>
-                <li><strong>Enter your client code</strong> when prompted: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">{{ client_code }}</code></li>
+                <li><strong>Enter your client code</strong> when prompted (from the previous page)</li>
                 <li>The program will automatically collect your hardware information and submit it</li>
                 <li>Wait for the success message</li>
             </ol>

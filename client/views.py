@@ -65,12 +65,13 @@ def generate_client_code(email):
     return prefix + random_part
 
 
-def download_file(request):
-    if request.method == 'GET':
-        name = request.GET.get('name')
-        email = request.GET.get('email')
-        phone = request.GET.get('phone')
-        owner_name = request.GET.get('owner_name', 'Shop Owner')  # Default owner name
+def submit_form(request):
+    """Handle form submission and create DB record"""
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        owner_name = request.POST.get('owner_name', 'Shop Owner')
 
         exists = HardwareRecord.objects.filter(client_email=email).exists()
 
@@ -89,30 +90,24 @@ def download_file(request):
             client_code=client_code
         )
 
-        # Prepare the general exe file and show code to user
-        return prepare_exe_file(request, client_code)
+        # Show success page with code
+        return render(request, 'client/success.html', {
+            'client_code': client_code,
+            'client_name': name
+        })
 
-    return HttpResponse("LOL")
+    return HttpResponse("Invalid request method", status=405)
+
+
+def download_file(request):
+    """Serve the download page with instructions"""
+    return render(request, 'client/download.html', {})
 
 
 
 
 
-def prepare_exe_file(request, client_code):
-    """Serve the pre-built general exe file and display the code to user"""
-    # Path to the general exe file (should be pre-built and stored)
-    file_path = os.path.join(settings.MEDIA_ROOT, 'downloads', 'hardware_collector.exe')
-    
-    # Check if general exe exists, if not, we need to build it once
-    if not os.path.exists(file_path):
-        # Build the general exe once (without personalization)
-        file_path = build_general_exe()
-    
-    # Render a page showing the code and download link
-    return render(request, 'client/download.html', {
-        'client_code': client_code,
-        'download_url': '/client/form/download-exe'
-    })
+
 
 
 def build_general_exe():
