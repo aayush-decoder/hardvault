@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - HardVault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fdf8;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(76, 175, 80, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #2d3748;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4caf50;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Content */
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .section h2 {
+            color: #2e7d32;
+            font-size: 32px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #4caf50;
+        }
+
+        .section h3 {
+            color: #4caf50;
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            color: #546e7a;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .section ul {
+            margin-left: 30px;
+            color: #546e7a;
+        }
+
+        .section ul li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: #e8f5e9;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 30px;
+            background: #f8fdf8;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-member .icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .team-member h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .team-member p {
+            color: #546e7a;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1b5e20;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: #81c784;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            .section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="logo">🔒 HardVault</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'product-form' %}">Submit Hardware</a>
+                <a href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>About HardVault</h1>
+        <p>Building trust through secure hardware information management</p>
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+        <!-- About Us -->
+        <div class="section">
+            <h2>Our Story</h2>
+            <p>HardVault was born from a simple observation: businesses and service providers needed a better way to track and manage hardware information from their clients. Traditional methods were time-consuming, error-prone, and lacked security.</p>
+            
+            <p>We set out to create a solution that would be:</p>
+            <ul>
+                <li><strong>Secure:</strong> Protecting sensitive hardware data with industry-standard encryption</li>
+                <li><strong>Simple:</strong> Making the process effortless for both businesses and clients</li>
+                <li><strong>Reliable:</strong> Ensuring accurate data collection every time</li>
+                <li><strong>Accessible:</strong> Available anywhere, on any device</li>
+            </ul>
+
+            <div class="highlight">
+                <p><strong>Our Mission:</strong> To empower businesses with secure, efficient hardware information management tools that build trust and streamline operations.</p>
+            </div>
+        </div>
+
+        <!-- Vision -->
+        <div class="section" id="vision">
+            <h2>Our Vision</h2>
+            <p>We envision a world where hardware information management is seamless, secure, and accessible to businesses of all sizes. HardVault aims to become the industry standard for hardware tracking, helping businesses:</p>
+            
+            <ul>
+                <li>Maintain accurate records of client hardware</li>
+                <li>Provide better service through detailed hardware knowledge</li>
+                <li>Build stronger relationships with clients through transparency</li>
+                <li>Streamline warranty and support processes</li>
+                <li>Make data-driven decisions about hardware trends</li>
+            </ul>
+
+            <h3>Looking Ahead</h3>
+            <p>We're constantly innovating and adding new features based on user feedback. Our roadmap includes:</p>
+            <ul>
+                <li>Advanced analytics and reporting</li>
+                <li>Integration with popular business tools</li>
+                <li>Mobile applications for on-the-go access</li>
+                <li>AI-powered insights and recommendations</li>
+                <li>Multi-language support for global reach</li>
+            </ul>
+        </div>
+
+        <!-- Developer -->
+        <div class="section">
+            <h2>Meet the Developer</h2>
+            <div class="team">
+                <div class="team-member">
+                    <div class="icon">👨‍💻</div>
+                    <h4>Development Team</h4>
+                    <p>Passionate developers dedicated to creating secure, user-friendly solutions for hardware management.</p>
+                </div>
+                <div class="team-member">
+                    <div class="icon">🎨</div>
+                    <h4>Design Team</h4>
+                    <p>Creating intuitive interfaces that make complex tasks simple and enjoyable.</p>
+                </div>
+                <div class="team-member">
+                    <div class="icon">🔒</div>
+                    <h4>Security Team</h4>
+                    <p>Ensuring your data is protected with the latest security standards and best practices.</p>
+                </div>
+            </div>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <p><strong>Built with care:</strong> HardVault is developed using modern technologies including Django, PostgreSQL, and industry-standard security practices. Every feature is designed with user experience and data security in mind.</p>
+            </div>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="section" id="privacy">
+            <h2>Privacy Policy</h2>
+            
+            <h3>Data Collection</h3>
+            <p>We collect only the information necessary to provide our services:</p>
+            <ul>
+                <li><strong>Account Information:</strong> Name, email, phone number for authentication and communication</li>
+                <li><strong>Hardware Information:</strong> System specifications, RAM details, disk information as submitted by users</li>
+                <li><strong>Usage Data:</strong> Login times, feature usage to improve our service</li>
+            </ul>
+
+            <h3>Data Usage</h3>
+            <p>Your data is used exclusively for:</p>
+            <ul>
+                <li>Providing hardware information management services</li>
+                <li>Connecting businesses with their clients</li>
+                <li>Improving our platform and user experience</li>
+                <li>Sending important service updates and notifications</li>
+            </ul>
+
+            <h3>Data Protection</h3>
+            <p>We take data security seriously:</p>
+            <ul>
+                <li><strong>Encryption:</strong> All data is encrypted in transit and at rest</li>
+                <li><strong>Access Control:</strong> Strict access controls ensure only authorized users can view data</li>
+                <li><strong>Regular Audits:</strong> We conduct regular security audits and updates</li>
+                <li><strong>Secure Infrastructure:</strong> Hosted on secure, reliable cloud infrastructure</li>
+            </ul>
+
+            <h3>Your Rights</h3>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access your personal data at any time</li>
+                <li>Request correction of inaccurate data</li>
+                <li>Request deletion of your account and data</li>
+                <li>Export your data in a portable format</li>
+                <li>Opt-out of non-essential communications</li>
+            </ul>
+
+            <h3>Data Sharing</h3>
+            <p>We never sell your data. Information is shared only:</p>
+            <ul>
+                <li>Between connected businesses and clients (as intended by the service)</li>
+                <li>With service providers who help us operate the platform (under strict confidentiality)</li>
+                <li>When required by law or to protect our rights</li>
+            </ul>
+
+            <h3>Cookies</h3>
+            <p>We use essential cookies for:</p>
+            <ul>
+                <li>Maintaining your login session</li>
+                <li>Remembering your preferences</li>
+                <li>Ensuring security and preventing fraud</li>
+            </ul>
+
+            <h3>Contact Us</h3>
+            <p>For privacy concerns or data requests, please contact us through your dashboard or email us at privacy@hardvault.com</p>
+
+            <div class="highlight">
+                <p><strong>Last Updated:</strong> December 2025</p>
+                <p>We may update this privacy policy from time to time. We will notify users of any significant changes.</p>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="section">
+            <h2>Get in Touch</h2>
+            <p>Have questions, feedback, or suggestions? We'd love to hear from you!</p>
+            
+            <div class="highlight">
+                <p><strong>📧 Email:</strong> support@hardvault.com</p>
+                <p><strong>💬 Support:</strong> Available through your dashboard</p>
+                <p><strong>🌐 Website:</strong> <a href="{% url 'home' %}" style="color: #4caf50;">hardvault.com</a></p>
+            </div>
+
+            <p style="margin-top: 20px;">We typically respond within 24 hours during business days.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 HardVault. All rights reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="{% url 'home' %}">Home</a> | 
+            <a href="{% url 'about' %}">About</a> | 
+            <a href="#privacy">Privacy Policy</a> | 
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+    </footer>
+</body>
+</html>
