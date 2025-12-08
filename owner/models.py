@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class HardwareRecord(models.Model):
     # Client Info
@@ -11,6 +12,9 @@ class HardwareRecord(models.Model):
 
     # Unique Code for client (first 3 chars of email + 6 random chars)
     client_code = models.CharField(max_length=20, unique=True, null=True)
+
+    # Link to authenticated user (optional - for backward compatibility)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='hardware_records')
 
     # System Info
     product_id = models.CharField(max_length=100, blank=True, null=True)
@@ -25,6 +29,10 @@ class HardwareRecord(models.Model):
     disk_model = models.CharField(max_length=255, blank=True, null=True)
     disk_interface_type = models.CharField(max_length=100, blank=True, null=True)
     disk_serial = models.CharField(max_length=100, blank=True, null=True)
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.client_name} - {self.client_code}"

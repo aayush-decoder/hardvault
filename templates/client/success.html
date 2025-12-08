@@ -3,89 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Successful</title>
+    <title>Submission Successful</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #4caf50;
-            text-align: center;
-        }
-        .code-box {
-            background: #e8f5e9;
-            border: 2px solid #4caf50;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .code {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2e7d32;
-            letter-spacing: 3px;
-            font-family: monospace;
-        }
-        .warning {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        .download-btn {
-            display: block;
+        .container { 
+            max-width: 700px; 
             width: 100%;
-            padding: 15px;
-            background: #2196f3;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 20px 0;
-            transition: background 0.3s;
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
-        .download-btn:hover {
-            background: #1976d2;
+        .success-header {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease-out;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        .success-header h1 { 
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .success-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .info-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .info-box .label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .info-box .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        .code-box { 
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 3px solid #4caf50; 
+            padding: 30px; 
+            margin: 30px 0; 
+            border-radius: 15px; 
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+        .code-label {
+            font-size: 14px;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .code { 
+            font-size: 40px; 
+            font-weight: bold; 
+            color: #1b5e20; 
+            letter-spacing: 5px; 
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-help {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+        .warning { 
+            background: #fff3e0; 
+            border-left: 4px solid #ff9800; 
+            padding: 20px; 
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        .warning strong {
+            color: #e65100;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .download-btn { 
+            display: block; 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            text-align: center; 
+            text-decoration: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            margin: 25px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .download-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .footer {
+            background: #f5f5f5;
+            padding: 25px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .steps {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        .steps h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .steps ol {
+            margin-left: 20px;
+            line-height: 1.8;
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .code { font-size: 32px; letter-spacing: 3px; }
+            .content { padding: 25px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>✓ Registration Successful!</h1>
-        
-        <p style="text-align: center; font-size: 18px; color: #666;">
-            Thank you, <strong>{{ client_name }}</strong>!
-        </p>
-
-        <div class="code-box">
-            <p style="margin: 0; font-size: 16px; color: #666;">Your Client Code:</p>
-            <div class="code">{{ client_code }}</div>
-            <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">Save this code - you'll need it!</p>
+        <div class="success-header">
+            <div class="success-icon">✓</div>
+            <h1>Submission Successful!</h1>
+            <p>Thank you, <strong>{{ client_name }}</strong></p>
         </div>
 
-        <div class="warning">
-            <strong>⚠ IMPORTANT:</strong> Please save your client code: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 16px;">{{ client_code }}</code>
+        <div class="content">
+            {% if owner_name %}
+            <div class="info-box">
+                <div class="label">Submitted to:</div>
+                <div class="value">{{ owner_name }}</div>
+            </div>
+            {% endif %}
+
+            <div class="code-box">
+                <div class="code-label">YOUR CLIENT CODE</div>
+                <div class="code">{{ client_code }}</div>
+                <div class="code-help">
+                    💾 Save this code - you'll need it to run the hardware collector
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ IMPORTANT - Save Your Code!</strong>
+                Write down or screenshot this code: <code style="background: #fff; padding: 5px 10px; border-radius: 5px; font-size: 18px; font-weight: bold;">{{ client_code }}</code>
+                <br><br>
+                You will need to enter this code when running the hardware collector program.
+            </div>
+
+            <div class="steps">
+                <h3>📋 Next Steps:</h3>
+                <ol>
+                    <li>Click the button below to download the hardware collector</li>
+                    <li>Run the downloaded program on your computer</li>
+                    <li>Enter your code: <strong>{{ client_code }}</strong></li>
+                    <li>The program will collect and submit your hardware information</li>
+                    <li>Wait for the success confirmation</li>
+                </ol>
+            </div>
+
+            <a href="{% url 'download-page' %}" class="download-btn">
+                ⬇️ Download Hardware Collector
+            </a>
         </div>
 
-        <a href="{% url 'download-page' %}" class="download-btn">Continue to Download →</a>
-
-        <div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 5px;">
-            <p style="margin: 0; color: #666; text-align: center;">
-                Next step: Download and run the hardware collector program with your code.
-            </p>
+        <div class="footer">
+            <p>Need help? Contact {% if owner_name %}{{ owner_name }}{% else %}your system administrator{% endif %}.</p>
         </div>
     </div>
 </body>

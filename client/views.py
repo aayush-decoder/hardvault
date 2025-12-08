@@ -19,7 +19,25 @@ def login(request):
     return HttpResponse("client side")
 
 def form(request):
-    return render(request, "client/form.html", {'request': request})
+    """Hardware submission form - auto-fill for logged-in users"""
+    context = {'request': request}
+    
+    # If user is logged in, pre-fill their information
+    if request.user.is_authenticated:
+        context['user'] = request.user
+        context['is_logged_in'] = True
+        
+        # Get user's owners if they're a client
+        if hasattr(request.user, 'client_profile'):
+            from accounts.models import Owner
+            context['user_owners'] = request.user.client_profile.owners.all()
+            context['all_owners'] = Owner.objects.all()
+    else:
+        from accounts.models import Owner
+        context['is_logged_in'] = False
+        context['all_owners'] = Owner.objects.all()
+    
+    return render(request, "client/form.html", context)
 
 
 
@@ -71,29 +89,65 @@ def submit_form(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        owner_name = request.POST.get('owner_name', 'Shop Owner')
+        owner_id = request.POST.get('owner_id')
+        
+        # Get owner details
+        from accounts.models import Owner
+        owner_name = 'Shop Owner'
+        if owner_id:
+            try:
+                owner = Owner.objects.get(id=owner_id)
+                owner_name = owner.company_name
+            except Owner.DoesNotExist:
+                pass
 
-        exists = HardwareRecord.objects.filter(client_email=email).exists()
+        # Check for duplicate - allow multiple submissions for logged-in users with different owners
+        if request.user.is_authenticated:
+            # Logged-in users can submit multiple times for different owners
+            exists = HardwareRecord.objects.filter(
+                client_email=email,
+                owner_name=owner_name
+            ).exists()
+        else:
+            # Anonymous users - check if email already used
+            exists = HardwareRecord.objects.filter(client_email=email).exists()
 
         if exists:
-            return render(request, "client/form.html", {'request': request, 'duplicate_email': True})
+            context = {
+                'request': request,
+                'duplicate_error': True,
+                'error_message': 'You have already submitted hardware information for this owner.'
+            }
+            if request.user.is_authenticated:
+                context['user'] = request.user
+                context['is_logged_in'] = True
+                if hasattr(request.user, 'client_profile'):
+                    context['user_owners'] = request.user.client_profile.owners.all()
+                    context['all_owners'] = Owner.objects.all()
+            else:
+                context['is_logged_in'] = False
+                context['all_owners'] = Owner.objects.all()
+            
+            return render(request, "client/form.html", context)
 
         # Generate unique code
         client_code = generate_client_code(email)
 
         # Create record in database with empty hardware fields
-        HardwareRecord.objects.create(
+        record = HardwareRecord.objects.create(
             client_name=name,
             client_email=email,
             client_phone=phone,
             owner_name=owner_name,
-            client_code=client_code
+            client_code=client_code,
+            user=request.user if request.user.is_authenticated else None
         )
 
         # Show success page with code
         return render(request, 'client/success.html', {
             'client_code': client_code,
-            'client_name': name
+            'client_name': name,
+            'owner_name': owner_name
         })
 
     return HttpResponse("Invalid request method", status=405)

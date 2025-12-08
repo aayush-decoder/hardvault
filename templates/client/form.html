@@ -3,63 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
+    <title>Hardware Information Submission</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eeeefe 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, #0fb572ff 0%, #009669ff 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .form-header h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        
+        .user-badge strong {
+            color: #fff;
+        }
+        
+        .form-body {
+            padding: 40px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border-left: 4px solid #1565c0;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        label .required {
+            color: #f44336;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        input:disabled {
+            background: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .input-icon::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            opacity: 0.5;
+        }
+        
+        .owner-select-wrapper {
+            position: relative;
+        }
+        
+        .owner-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .owner-card:hover {
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .owner-card.selected {
+            border-color: #667eea;
+            background: #f3f4ff;
+        }
+        
+        .owner-card input[type="radio"] {
+            margin-right: 12px;
+        }
+        
+        .owner-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .owner-info .company {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .owner-info .owner-name {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .form-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .help-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .form-body {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <form action="{% url "submit-form" %}" method="POST">
-        {% csrf_token %}
-        Name<input type="text" onchange="updateName(this)" name="name" required>
-        <br>
-        email<input type="email" onchange="updateEmail(this)" oninput="removeErrorLabel()" name="email" required>
-        {% if duplicate_email %}
-            <span id="emailError" style="color: red">This email is already registered. Please try different email.</span>
-        {% else %}
-            <span id="emailError" style="color: red"></span>
-        {% endif %}
-        <br>
-        phone<input type="text" name="phone" required>
-        <br>
-        Owner Name<input type="text" name="owner_name" placeholder="Shop Owner Name">
-        <br>
-        <button type="submit" onclick="showLoading()">
-            Submit
-        </button>
-    </form>
+    {% comment %} <div class="header">
+        <h1> Hardware Information System</h1>
+        <p>Submit your computer hardware details securely</p>
+    </div> {% endcomment %}
 
-    Steps:
-    <br>
-    <ol>
-        <li>Run the .exe file</li>
-        <li><a id="link" href="#">Click here</a> to see your hardware details</li>
-    </ol>
+    <div class="container">
+        <div class="form-header">
+            <h2>Hardware Submission Form</h2>
+            {% if is_logged_in %}
+            <div class="user-badge">
+                ✓ Logged in as <strong>{{ user.get_full_name }}</strong>
+            </div>
+            {% else %}
+            <p>Please fill in your details below</p>
+            {% endif %}
+        </div>
 
-<script>
+        <div class="form-body">
+            {% if duplicate_error %}
+            <div class="alert alert-error">
+                <span>⚠️</span>
+                <div>
+                    <strong>Duplicate Submission</strong><br>
+                    {{ error_message }}
+                </div>
+            </div>
+            {% endif %}
 
-    var name, email;
+            {% if is_logged_in %}
+            <div class="alert alert-info">
+                <span>ℹ️</span>
+                <div>
+                    Your information has been auto-filled. Please select an owner and submit.
+                </div>
+            </div>
+            {% endif %}
 
-    function showLoading() {
-        this.innerHTML = "Checking compatibility. Your will start downloading less than 30 seconds";
+            <form action="{% url 'submit-form' %}" method="POST" id="hardware-form">
+                {% csrf_token %}
 
-    }
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        value="{% if is_logged_in %}{{ user.get_full_name }}{% endif %}"
+                        {% if is_logged_in %}readonly{% endif %}
+                        required
+                        placeholder="Enter your full name"
+                    >
+                </div>
 
-    function removeErrorLabel() {
-        document.getElementById("emailError").innerHTML = "";
-    }
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        value="{% if is_logged_in %}{{ user.email }}{% endif %}"
+                        {% if is_logged_in %}readonly{% endif %}
+                        required
+                        placeholder="your.email@example.com"
+                    >
+                    <div class="help-text">We'll send your hardware collection code to this email</div>
+                </div>
 
-    function updateName(p) {
-        name = p.value;
-        document.getElementById("link").href = `{% url "client-data-api" %}&name=${name}&email=${email}`;
-    }
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input 
+                        type="tel" 
+                        name="phone" 
+                        value="{% if is_logged_in %}{{ user.phone|default:'' }}{% endif %}"
+                        {% if is_logged_in and user.phone %}readonly{% endif %}
+                        required
+                        placeholder="+1 (555) 123-4567"
+                    >
+                </div>
 
-    function updateEmail(p) {
-        email = p.value;
-        document.getElementById("link").href = `{% url "client-data-api" %}?name=${name}&email=${email}`;
-    }
+                <div class="divider"></div>
 
+                <div class="form-group">
+                    <label>Select Owner/Shop <span class="required">*</span></label>
+                    
+                    {% if is_logged_in and user_owners %}
+                    <div class="alert alert-success" style="margin-bottom: 15px;">
+                        <span>✓</span>
+                        <div>You are associated with {{ user_owners.count }} owner(s)</div>
+                    </div>
+                    {% endif %}
 
+                    <div class="owner-select-wrapper">
+                        {% if all_owners %}
+                            {% for owner in all_owners %}
+                            <label class="owner-card" onclick="selectOwner(this)">
+                                <input 
+                                    type="radio" 
+                                    name="owner_id" 
+                                    value="{{ owner.id }}"
+                                    {% if user_owners and owner in user_owners and user_owners.count == 1 %}checked{% endif %}
+                                    required
+                                >
+                                <div class="owner-info">
+                                    <div>
+                                        <div class="company">{{ owner.company_name }}</div>
+                                        <div class="owner-name">Owner: {{ owner.user.get_full_name }}</div>
+                                    </div>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        {% else %}
+                        <div class="alert alert-error">
+                            <span>⚠️</span>
+                            <div>No owners available. Please contact administrator.</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="help-text">Select the shop/owner you're submitting hardware information for</div>
+                </div>
 
+                <button type="submit" class="btn-submit">
+                    Submit Hardware Information →
+                </button>
+            </form>
+        </div>
 
-</script>
+        <div class="form-footer">
+            {% if not is_logged_in %}
+            <p>Have an account? <a href="{% url 'login' %}">Login</a> for faster submission</p>
+            <p style="margin-top: 10px;">Don't have an account? <a href="{% url 'client-register' %}">Register here</a></p>
+            {% else %}
+            <p><a href="{% url 'client-dashboard' %}">← Back to Dashboard</a></p>
+            {% endif %}
+        </div>
+    </div>
 
+    <script>
+        function selectOwner(card) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.owner-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            card.classList.add('selected');
+        }
+
+        // Auto-select if only one owner and user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkedRadio = document.querySelector('input[name="owner_id"]:checked');
+            if (checkedRadio) {
+                checkedRadio.closest('.owner-card').classList.add('selected');
+            }
+        });
+
+        // Form validation
+        document.getElementById('hardware-form').addEventListener('submit', function(e) {
+            const ownerSelected = document.querySelector('input[name="owner_id"]:checked');
+            if (!ownerSelected) {
+                e.preventDefault();
+                alert('Please select an owner/shop before submitting.');
+            }
+        });
+    </script>
 </body>
 </html>
