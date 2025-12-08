@@ -2,6 +2,5 @@ django
 wmi
 requests
 psutil
-platform
 json
 psycopg2
