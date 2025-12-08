@@ -3,3 +3,4 @@ wmi
 requests
 psutil
 psycopg2
+gunicorn
