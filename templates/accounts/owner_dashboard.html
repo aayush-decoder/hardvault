@@ -175,16 +175,8 @@
     <div class="container">
         <div class="stats">
             <div class="stat-card">
-                <h3>Total Clients</h3>
-                <div class="number">{{ clients.count }}</div>
-            </div>
-            <div class="stat-card">
                 <h3>Hardware Records</h3>
                 <div class="number">{{ hardware_records.count }}</div>
-            </div>
-            <div class="stat-card">
-                <h3>Pending Submissions</h3>
-                <div class="number">{{ clients.count|add:"-"|add:hardware_records.count }}</div>
             </div>
         </div>
 
@@ -195,45 +187,11 @@
                 <div class="invitation-code">{{ owner.invitation_code }}</div>
                 <p style="margin-top: 15px;"><strong>Invitation Link:</strong></p>
                 <div class="invitation-link" id="invitation-link">
-                    {{ request.scheme }}://{{ request.get_host }}/accounts/client/register/?invite={{ owner.invitation_code }}
+                    {{ request.scheme }}://{{ request.get_host }}/client/form/?invite={{ owner.invitation_code }}
                 </div>
                 <button class="btn-copy" onclick="copyInvitationLink()">Copy Link</button>
             </div>
-            <p style="color: #666;">Share this link with clients to automatically associate them with your company.</p>
-        </div>
-
-        <div class="section">
-            <h2>My Clients ({{ clients.count }})</h2>
-            {% if clients %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in clients %}
-                    <tr>
-                        <td>{{ client.user.get_full_name }}</td>
-                        <td>{{ client.user.email }}</td>
-                        <td>{{ client.user.phone|default:"N/A" }}</td>
-                        <td>
-                            {% if client.user.email in emails %}
-                            <span class="badge badge-success">Submitted</span>
-                            {% else %}
-                            <span class="badge badge-pending">Pending</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p style="color: #999; text-align: center; padding: 40px;">No clients yet. Share your invitation link to get started!</p>
-            {% endif %}
+            <p style="color: #666;">Share this link with customers to submit their hardware information.</p>
         </div>
 
         <div class="section">

@@ -9,12 +9,13 @@ from django.utils import timezone
 class User(AbstractUser):
     """Base user model"""
     USER_TYPE_CHOICES = (
+        ('admin', 'Admin'),
         ('owner', 'Owner'),
-        ('client', 'Client'),
     )
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
+    is_approved = models.BooleanField(default=False)  # For owner approval by admin
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -43,15 +44,6 @@ class Owner(models.Model):
     
     def __str__(self):
         return f"{self.company_name} - {self.user.email}"
-
-
-class Client(models.Model):
-    """Client profile"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile')
-    owners = models.ManyToManyField(Owner, related_name='clients', blank=True)
-    
-    def __str__(self):
-        return f"{self.user.get_full_name()} - {self.user.email}"
 
 
 class OTP(models.Model):

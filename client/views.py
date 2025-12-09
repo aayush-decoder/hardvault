@@ -1,9 +1,7 @@
 from django.shortcuts import render, HttpResponse
-from django.http import JsonResponse
-
-from django.http import FileResponse
-import os
+from django.http import JsonResponse, FileResponse
 from django.conf import settings
+import os
 import subprocess
 import shutil
 import random
@@ -12,30 +10,24 @@ import string
 from owner.models import HardwareRecord
 
 
-
-
-# Create your views here.
-def login(request):
-    return HttpResponse("client side")
-
 def form(request):
-    """Hardware submission form - auto-fill for logged-in users"""
-    context = {'request': request}
+    """Hardware submission form - public access with optional invitation"""
+    from accounts.models import Owner
     
-    # If user is logged in, pre-fill their information
-    if request.user.is_authenticated:
-        context['user'] = request.user
-        context['is_logged_in'] = True
-        
-        # Get user's owners if they're a client
-        if hasattr(request.user, 'client_profile'):
-            from accounts.models import Owner
-            context['user_owners'] = request.user.client_profile.owners.all()
-            context['all_owners'] = Owner.objects.all()
-    else:
-        from accounts.models import Owner
-        context['is_logged_in'] = False
-        context['all_owners'] = Owner.objects.all()
+    context = {'request': request}
+    invitation_code = request.GET.get('invite')
+    selected_owner = None
+    
+    # Check for invitation code
+    if invitation_code:
+        try:
+            selected_owner = Owner.objects.get(invitation_code=invitation_code)
+            context['selected_owner'] = selected_owner
+        except Owner.DoesNotExist:
+            context['error'] = 'Invalid invitation code'
+    
+    context['all_owners'] = Owner.objects.filter(user__is_approved=True)
+    context['is_logged_in'] = False
     
     return render(request, "client/form.html", context)
 
@@ -101,33 +93,20 @@ def submit_form(request):
             except Owner.DoesNotExist:
                 pass
 
-        # Check for duplicate - allow multiple submissions for logged-in users with different owners
-        if request.user.is_authenticated:
-            # Logged-in users can submit multiple times for different owners
-            exists = HardwareRecord.objects.filter(
-                client_email=email,
-                owner_name=owner_name
-            ).exists()
-        else:
-            # Anonymous users - check if email already used
-            exists = HardwareRecord.objects.filter(client_email=email).exists()
+        # Check for duplicate - one submission per email per owner
+        exists = HardwareRecord.objects.filter(
+            client_email=email,
+            owner_name=owner_name
+        ).exists()
 
         if exists:
             context = {
                 'request': request,
                 'duplicate_error': True,
-                'error_message': 'You have already submitted hardware information for this owner.'
+                'error_message': 'You have already submitted hardware information for this owner.',
+                'is_logged_in': False,
+                'all_owners': Owner.objects.filter(user__is_approved=True)
             }
-            if request.user.is_authenticated:
-                context['user'] = request.user
-                context['is_logged_in'] = True
-                if hasattr(request.user, 'client_profile'):
-                    context['user_owners'] = request.user.client_profile.owners.all()
-                    context['all_owners'] = Owner.objects.all()
-            else:
-                context['is_logged_in'] = False
-                context['all_owners'] = Owner.objects.all()
-            
             return render(request, "client/form.html", context)
 
         # Generate unique code
@@ -139,8 +118,7 @@ def submit_form(request):
             client_email=email,
             client_phone=phone,
             owner_name=owner_name,
-            client_code=client_code,
-            user=request.user if request.user.is_authenticated else None
+            client_code=client_code
         )
 
         # Show success page with code

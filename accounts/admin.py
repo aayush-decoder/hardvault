@@ -1,25 +1,32 @@
 from django.contrib import admin
-from .models import User, Owner, Client, OTP
+from .models import User, Owner, OTP
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['email', 'username', 'user_type', 'is_active', 'date_joined']
-    list_filter = ['user_type', 'is_active']
+    list_display = ['email', 'username', 'user_type', 'is_approved', 'is_active', 'date_joined']
+    list_filter = ['user_type', 'is_approved', 'is_active']
     search_fields = ['email', 'username', 'first_name', 'last_name']
+    actions = ['approve_owners']
+    
+    def approve_owners(self, request, queryset):
+        """Approve selected owner accounts"""
+        updated = queryset.filter(user_type='owner', is_approved=False).update(
+            is_approved=True,
+            is_active=True
+        )
+        self.message_user(request, f'{updated} owner(s) approved successfully.')
+    approve_owners.short_description = 'Approve selected owners'
 
 @admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
-    list_display = ['company_name', 'user', 'invitation_code']
+    list_display = ['company_name', 'user', 'invitation_code', 'is_approved']
+    list_filter = ['user__is_approved']
     search_fields = ['company_name', 'user__email']
-
-@admin.register(Client)
-class ClientAdmin(admin.ModelAdmin):
-    list_display = ['user', 'get_owners']
-    search_fields = ['user__email', 'user__first_name', 'user__last_name']
     
-    def get_owners(self, obj):
-        return ", ".join([owner.company_name for owner in obj.owners.all()])
-    get_owners.short_description = 'Owners'
+    def is_approved(self, obj):
+        return obj.user.is_approved
+    is_approved.boolean = True
+    is_approved.short_description = 'Approved'
 
 @admin.register(OTP)
 class OTPAdmin(admin.ModelAdmin):

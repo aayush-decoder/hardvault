@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Pending</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #e8f5e9 0%, #fff3e0 100%);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container { 
+            max-width: 600px; 
+            background: white; 
+            padding: 50px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .icon { font-size: 80px; margin-bottom: 20px; }
+        h1 { color: #2e7d32; margin-bottom: 20px; font-size: 28px; }
+        .company { color: #ff9800; font-weight: bold; font-size: 24px; margin: 20px 0; }
+        p { color: #555; line-height: 1.8; margin-bottom: 15px; font-size: 16px; }
+        .info-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        .info-box strong { color: #e65100; }
+        .btn { 
+            display: inline-block;
+            background: #4caf50; 
+            color: white; 
+            padding: 15px 40px; 
+            border-radius: 5px; 
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">⏳</div>
+        <h1>Registration Submitted Successfully!</h1>
+        <div class="company">{{ company_name }}</div>
+        
+        <p>Thank you for registering with HardVault.</p>
+        
+        <div class="info-box">
+            <strong>⚠️ Pending Admin Approval</strong><br><br>
+            Your account is currently pending approval by our administrators. 
+            You will be able to login once your account has been approved.
+            <br><br>
+            This typically takes 1-2 business days.
+        </div>
+        
+        <p>You will receive a notification once your account is approved.</p>
+        <p>If you have any questions, please contact our support team.</p>
+        
+        <a href="{% url 'login' %}" class="btn">Go to Login Page</a>
+    </div>
+</body>
+</html>

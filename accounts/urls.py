@@ -4,8 +4,6 @@ from . import views
 urlpatterns = [
     # Registration
     path('owner/register/', views.owner_register, name='owner-register'),
-    path('client/register/', views.client_register, name='client-register'),
-    path('verify-otp/', views.verify_otp, name='verify-otp'),
     
     # Login/Logout
     path('login/', views.user_login, name='login'),
@@ -18,7 +16,6 @@ urlpatterns = [
     
     # Dashboards
     path('owner/dashboard/', views.owner_dashboard, name='owner-dashboard'),
-    path('client/dashboard/', views.client_dashboard, name='client-dashboard'),
     
     # API
     path('api/search-owners/', views.search_owners, name='search-owners'),
