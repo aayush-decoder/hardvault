@@ -401,10 +401,8 @@ def resend_otp(request):
 # ==================== HELPER FUNCTIONS ====================
 
 def send_otp_email(email, otp_code, otp_type):
-    """Send OTP via email with HTML template using smtplib"""
-    import smtplib
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
+    """Send OTP via email with HTML template using Resend API"""
+    import requests
     
     if otp_type == 'registration':
         subject = '🔒 Your HardVault Registration Code'
@@ -414,12 +412,6 @@ def send_otp_email(email, otp_code, otp_type):
         subject = '🔑 Your HardVault Password Reset Code'
         title = 'Password Reset Request'
         message = 'You requested to reset your password. Use the code below to continue.'
-    
-    # Create message
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = settings.DEFAULT_FROM_EMAIL
-    msg['To'] = email
     
     # Plain text version
     text_content = f'{title}\n\n{message}\n\nYour OTP: {otp_code}\n\nThis code will expire in 10 minutes.\n\nIf you didn\'t request this, please ignore this email.'
@@ -458,18 +450,26 @@ def send_otp_email(email, otp_code, otp_type):
     </html>
     """
     
-    # Attach parts
-    part1 = MIMEText(text_content, 'plain')
-    part2 = MIMEText(html_content, 'html')
-    msg.attach(part1)
-    msg.attach(part2)
-    
     try:
-        server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
-        server.starttls()
-        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        server.send_message(msg)
-        server.quit()
-        print(f"✓ Email sent successfully to {email}")
+        # Send email using Resend API
+        response = requests.post(
+            'https://api.resend.com/emails',
+            headers={
+                'Authorization': f'Bearer {settings.RESEND_API_KEY}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'from': settings.DEFAULT_FROM_EMAIL,
+                'to': [email],
+                'subject': subject,
+                'text': text_content,
+                'html': html_content
+            }
+        )
+        
+        if response.status_code == 200:
+            print(f"✓ Email sent successfully to {email}")
+        else:
+            print(f"✗ Error sending email: {response.status_code} - {response.text}")
     except Exception as e:
         print(f"✗ Error sending email: {e}")
