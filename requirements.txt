@@ -4,3 +4,4 @@ requests
 psutil
 psycopg2
 gunicorn
+firebase-admin==6.4.0

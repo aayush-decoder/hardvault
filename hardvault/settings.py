@@ -141,11 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 
-# Email Configuration (Gmail SMTP)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# Firebase Configuration
+import os
+FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase_config.json')
+
+# Email Configuration (for fallback)
 EMAIL_HOST_USER = 'dev.aayushdroid@gmail.com'
 EMAIL_HOST_PASSWORD = 'kvfgmhynkoblhqbh'
 DEFAULT_FROM_EMAIL = 'HardVault <dev.aayushdroid@gmail.com>'

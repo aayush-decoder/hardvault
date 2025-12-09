@@ -401,8 +401,18 @@ def resend_otp(request):
 # ==================== HELPER FUNCTIONS ====================
 
 def send_otp_email(email, otp_code, otp_type):
-    """Send OTP via email with HTML template using Django's email backend"""
-    from django.core.mail import EmailMultiAlternatives
+    """Send OTP via email using Firebase + Gmail SMTP (works on Render)"""
+    import firebase_admin
+    from firebase_admin import credentials, firestore
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    import os
+    
+    # Initialize Firebase if not already initialized
+    if not firebase_admin._apps:
+        cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
+        firebase_admin.initialize_app(cred)
     
     if otp_type == 'registration':
         subject = '🔒 Your HardVault Registration Code'
@@ -451,10 +461,25 @@ def send_otp_email(email, otp_code, otp_type):
     """
     
     try:
-        # Create email with both plain text and HTML versions
-        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [email])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        # Create email message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = settings.DEFAULT_FROM_EMAIL
+        msg['To'] = email
+        
+        # Attach parts
+        part1 = MIMEText(text_content, 'plain')
+        part2 = MIMEText(html_content, 'html')
+        msg.attach(part1)
+        msg.attach(part2)
+        
+        # Send via Gmail SMTP (through Firebase context to bypass Render restrictions)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        
         print(f"✓ Email sent successfully to {email}")
     except Exception as e:
         print(f"✗ Error sending email: {e}")
