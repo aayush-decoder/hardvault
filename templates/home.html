@@ -474,7 +474,7 @@
             <p>HardVault helps businesses and service providers securely collect, store, and manage hardware information from their clients with ease.</p>
             <div class="hero-buttons">
                 <a href="{% url 'owner-register' %}" class="btn-primary">For Businesses →</a>
-                <a href="{% url 'client-register' %}" class="btn-secondary">For Clients →</a>
+                {% comment %} <a href="{% url 'client-register' %}" class="btn-secondary">For Clients →</a> {% endcomment %}
             </div>
         </div>
         <div class="hero-graphic">
@@ -557,7 +557,7 @@
         <p>Join hundreds of businesses and clients using HardVault for secure hardware management</p>
         <div class="cta-buttons">
             <a href="{% url 'owner-register' %}" class="btn-white">Register Your Business</a>
-            <a href="{% url 'client-register' %}" class="btn-secondary">Register as Client</a>
+            {% comment %} <a href="{% url 'client-register' %}" class="btn-secondary">Register as Client</a> {% endcomment %}
         </div>
     </section>
 
@@ -587,8 +587,8 @@
             <div class="footer-section">
                 <h3>For Clients</h3>
                 <ul>
-                    <li><a href="{% url 'client-register' %}">Register</a></li>
-                    <li><a href="{% url 'client-dashboard' %}">Dashboard</a></li>
+                    {% comment %} <li><a href="{% url 'client-register' %}">Register</a></li> {% endcomment %}
+                    {% comment %} <li><a href="{% url 'client-dashboard' %}">Dashboard</a></li> {% endcomment %}
                 </ul>
             </div>
         </div>
