@@ -401,8 +401,8 @@ def resend_otp(request):
 # ==================== HELPER FUNCTIONS ====================
 
 def send_otp_email(email, otp_code, otp_type):
-    """Send OTP via email with HTML template using Resend API"""
-    import requests
+    """Send OTP via email with HTML template using Django's email backend"""
+    from django.core.mail import EmailMultiAlternatives
     
     if otp_type == 'registration':
         subject = '🔒 Your HardVault Registration Code'
@@ -451,25 +451,10 @@ def send_otp_email(email, otp_code, otp_type):
     """
     
     try:
-        # Send email using Resend API
-        response = requests.post(
-            'https://api.resend.com/emails',
-            headers={
-                'Authorization': f'Bearer {settings.RESEND_API_KEY}',
-                'Content-Type': 'application/json'
-            },
-            json={
-                'from': settings.DEFAULT_FROM_EMAIL,
-                'to': [email],
-                'subject': subject,
-                'text': text_content,
-                'html': html_content
-            }
-        )
-        
-        if response.status_code == 200:
-            print(f"✓ Email sent successfully to {email}")
-        else:
-            print(f"✗ Error sending email: {response.status_code} - {response.text}")
+        # Create email with both plain text and HTML versions
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        print(f"✓ Email sent successfully to {email}")
     except Exception as e:
         print(f"✗ Error sending email: {e}")

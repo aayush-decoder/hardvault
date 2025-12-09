@@ -4,4 +4,3 @@ requests
 psutil
 psycopg2
 gunicorn
-resend

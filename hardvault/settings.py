@@ -141,9 +141,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 
-# Email Configuration (Resend API)
-RESEND_API_KEY = 're_acj3v5Yn_8jmapgszqQtHyaGCcth1zrQa'
-DEFAULT_FROM_EMAIL = 'HardVault <onboarding@resend.dev>'
+# Email Configuration (Gmail SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'dev.aayushdroid@gmail.com'
+EMAIL_HOST_PASSWORD = 'kvfgmhynkoblhqbh'
+DEFAULT_FROM_EMAIL = 'HardVault <dev.aayushdroid@gmail.com>'
 
 # Login URLs
 LOGIN_URL = '/accounts/login/'
