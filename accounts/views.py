@@ -401,21 +401,75 @@ def resend_otp(request):
 # ==================== HELPER FUNCTIONS ====================
 
 def send_otp_email(email, otp_code, otp_type):
-    """Send OTP via email"""
-    subject = 'Your OTP Code'
+    """Send OTP via email with HTML template using smtplib"""
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
     
     if otp_type == 'registration':
-        message = f'Your OTP for registration is: {otp_code}\n\nThis OTP will expire in 10 minutes.'
+        subject = '🔒 Your HardVault Registration Code'
+        title = 'Welcome to HardVault!'
+        message = 'Thank you for registering. Use the code below to verify your account.'
     else:
-        message = f'Your OTP for password reset is: {otp_code}\n\nThis OTP will expire in 10 minutes.'
+        subject = '🔑 Your HardVault Password Reset Code'
+        title = 'Password Reset Request'
+        message = 'You requested to reset your password. Use the code below to continue.'
+    
+    # Create message
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = settings.DEFAULT_FROM_EMAIL
+    msg['To'] = email
+    
+    # Plain text version
+    text_content = f'{title}\n\n{message}\n\nYour OTP: {otp_code}\n\nThis code will expire in 10 minutes.\n\nIf you didn\'t request this, please ignore this email.'
+    
+    # HTML version with green/orange theme
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fff3e0 100%); padding: 40px 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(76, 175, 80, 0.2);">
+            <div style="background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); padding: 40px 30px; text-align: center;">
+                <h1 style="margin: 0; color: white; font-size: 32px;">🔒 HardVault</h1>
+                <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">{title}</p>
+            </div>
+            <div style="padding: 40px 30px;">
+                <p style="color: #2d3748; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">{message}</p>
+                <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 3px solid #4caf50; padding: 30px; border-radius: 15px; text-align: center; margin: 30px 0;">
+                    <p style="margin: 0 0 10px 0; color: #2e7d32; font-size: 14px; font-weight: 600; text-transform: uppercase;">Your Verification Code</p>
+                    <div style="font-size: 48px; font-weight: bold; color: #1b5e20; letter-spacing: 8px; font-family: 'Courier New', monospace; margin: 10px 0;">{otp_code}</div>
+                    <p style="margin: 10px 0 0 0; color: #2e7d32; font-size: 13px;">⏰ Expires in 10 minutes</p>
+                </div>
+                <div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; border-radius: 5px; margin: 30px 0;">
+                    <p style="margin: 0; color: #e65100; font-size: 14px;"><strong>⚠️ Security Notice:</strong> If you didn't request this code, please ignore this email. Your account is safe.</p>
+                </div>
+            </div>
+            <div style="background: #f8fdf8; padding: 30px; text-align: center; border-top: 1px solid #e0e0e0;">
+                <p style="margin: 0 0 10px 0; color: #546e7a; font-size: 14px;">This email was sent by HardVault</p>
+                <p style="margin: 0; color: #90a4ae; font-size: 12px;">Secure Hardware Information Management</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Attach parts
+    part1 = MIMEText(text_content, 'plain')
+    part2 = MIMEText(html_content, 'html')
+    msg.attach(part1)
+    msg.attach(part2)
     
     try:
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
-        )
+        server = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        server.starttls()
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        print(f"✓ Email sent successfully to {email}")
     except Exception as e:
-        print(f"Error sending email: {e}")
+        print(f"✗ Error sending email: {e}")
