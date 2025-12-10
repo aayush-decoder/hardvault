@@ -62,7 +62,7 @@ if __name__ == "__main__":
     
     print("\nSubmitting data to server...")
     try:
-        response = requests.post("http://127.0.0.1:8000/owner/data/api/", json=data)
+        response = requests.post("https://hardvault.onrender.com/owner/data/api/", json=data)
         
         if response.status_code == 200:
             print("\n✓ Success! Your hardware information has been submitted.")
