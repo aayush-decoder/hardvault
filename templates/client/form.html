@@ -411,9 +411,9 @@
         <div class="form-footer">
             {% if not is_logged_in %}
             <p>Have an account? <a href="{% url 'login' %}">Login</a> for faster submission</p>
-            <p style="margin-top: 10px;">Don't have an account? <a href="{% url 'client-register' %}">Register here</a></p>
+            {% comment %} <p style="margin-top: 10px;">Don't have an account? <a href="{% url 'client-register' %}">Register here</a></p> {% endcomment %}
             {% else %}
-            <p><a href="{% url 'client-dashboard' %}">← Back to Dashboard</a></p>
+            {% comment %} <p><a href="{% url 'client-dashboard' %}">← Back to Dashboard</a></p> {% endcomment %}
             {% endif %}
         </div>
     </div>
